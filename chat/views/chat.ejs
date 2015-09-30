@@ -1,23 +1,26 @@
 <% include top %>
-			<div class="page-header">
-				<h1> Chat Room </h1>
-			</div>
-			<div class="navbar-form navbar-left">
-		    	<input type="text" id="message" class="form-control" placeholder="Enter some stuff" name="msg">
-		  		<button onclick="test()" class="btn btn-default">Submit</button>
-		  	</div>
-		  	<div class="navbar-text">
-		  		<h3> Messages </h3>
-		  		<textarea id="area" rows='20' cols='50'></textarea>
-		  	</div>
+		<div class="page-header">
+			<h1> Chat Room </h1>
+		</div>
+		<div class="navbar-form navbar-left">
+	    	<input type="text" id="message" class="form-control" placeholder="Enter some stuff" name="msg">
+	  		<button onclick="socketConnection()" class="btn btn-default">Submit</button>
+	  		<h3> Messages </h3>
+	  		<textarea disabled id="area" rows='20' cols='50'></textarea>
+	  	</div>
+
 		 <script>
-		 	function test() {
+		 	function socketConnection() {
 		 		var primus = Primus.connect();
 		 		primus.write(document.getElementById("message").value);
 		 		document.getElementById("message").value = "";
 		 		primus.on("data", function(msg) {
 		 			document.getElementById("area").value += msg + "\r\n";
 		 		});
+
+		 		primus.on('disconnection',function(spark) {
+      				alert("Server disconnected");
+				})
 		 	}
 		 </script>
 	</body>

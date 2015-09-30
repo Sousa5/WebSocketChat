@@ -64,17 +64,21 @@ app.use(function(err, req, res, next) {
   });
 });
 
-var arr = ["Hello","Friend","Nice to meet you","My friend is awesome"];
+// Function to generate random number to index array
+function generateValue() {
+  return parseInt(Math.random() * 10);
+}
+
+var arr = ["Hello","How are you?","Hello World","NodeJS","websockets","SLB","JavaScript","Programming","Fine","Games"];
 
 primus.on('connection', function(spark) {
-  console.log("Connected with someone");
   spark.on("data", function(data) {
       spark.write("Server Received: " + data);
-      spark.write("Server Response: " + arr[0]);
+      spark.write("Server Response: " + arr[generateValue()]);
   }); 
 });
 
 primus.on('disconnection',function(spark) {
-  console.log("Connection Closed");
+      console.log("Connection is closed!");
 })
 module.exports = app;
