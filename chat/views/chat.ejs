@@ -4,24 +4,28 @@
 		</div>
 		<div class="navbar-form navbar-left">
 	    	<input type="text" id="message" class="form-control" placeholder="Enter some stuff" name="msg">
-	  		<button onclick="socketConnection()" class="btn btn-default">Submit</button>
+	  		<button onclick="receiveMessage()" class="btn btn-default">Send</button>
 	  		<h3> Messages </h3>
 	  		<textarea disabled id="area" rows='20' cols='50'></textarea>
 	  	</div>
 
 		 <script>
-		 	function socketConnection() {
-		 		var primus = Primus.connect();
+		 	var primus = Primus.connect();
+
+		 	function receiveMessage() {
+		 		primus = Primus.connect();
 		 		primus.write(document.getElementById("message").value);
 		 		document.getElementById("message").value = "";
 		 		primus.on("data", function(msg) {
+		 			console.log(msg);
 		 			document.getElementById("area").value += msg + "\r\n";
 		 		});
-
-		 		primus.on('disconnection',function(spark) {
-      				alert("Server disconnected");
-				})
 		 	}
+
+		 	primus.on("reconnect", function() {
+		 		document.getElementById("area").value += "End Connection\r\n";
+		 		primus.end();
+		 	});
 		 </script>
 	</body>
 </html>

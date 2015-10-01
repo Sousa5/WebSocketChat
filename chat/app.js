@@ -12,7 +12,7 @@ var Primus = require('primus');
 
 var app = express();
 var server = http.createServer(app).listen(8000);
-var primus = new Primus(server,{transformer: 'websockets'});
+var primus = new Primus(server);
 
 console.log("Server is listening at port " + server.address().port);
 
@@ -79,6 +79,6 @@ primus.on('connection', function(spark) {
 });
 
 primus.on('disconnection',function(spark) {
-      console.log("Connection is closed!");
+  console.log("Connection is closed!");
 })
 module.exports = app;
